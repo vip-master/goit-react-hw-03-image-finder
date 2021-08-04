@@ -2,11 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import ImageGalleryItem from './imageGalleryItem/ImageGalleryItem';
 
-function ImageGallery({images}) {
+function ImageGallery({images,onClick}) {
     return (
         <ul className="ImageGallery">
           {images.map(image=>(
-              <ImageGalleryItem {...image} key={image.id}/>
+              <ImageGalleryItem {...image} onClick={onClick} key={image.id}/>
           ))}
         </ul>
     )
@@ -17,8 +17,8 @@ ImageGallery.propTypes = {
         smallImage:PropTypes.string.isRequired,
         alt:PropTypes.string.isRequired,
         id:PropTypes.string.isRequired,
-        onClick:PropTypes.func.isRequired,
-    })).isRequired
+    })).isRequired,
+    onClick:PropTypes.func.isRequired,
 }
 
 export default ImageGallery

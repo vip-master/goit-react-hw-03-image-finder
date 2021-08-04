@@ -37,6 +37,14 @@ export default class App extends Component {
         this.setState({...this._INITIAL_STATE_, query:e.target[1].value.trim().replaceAll(" ","+"),isLoading:true})        
     }
 
+    handelCicks=({target:{id}})=>{
+        const srcImg=this.state.images.find(i=>i.id===id)
+        this.setState({modal:{
+            bigImage:srcImg.bigImage,
+            alt:srcImg.alt,
+        }})
+    }
+
     downImages=async()=>{
         if(this.state.query===""){
             this.setState({isLoading:false})
@@ -63,21 +71,12 @@ export default class App extends Component {
 
             if(data.total!==0) {
                 maxPages=Math.ceil(data.totalHits/PER_PAGE)
-                images=data.hits.map(srcImg=>{
-                    const click=()=>{this.setState({
-                        modal:{
-                            bigImage:srcImg.largeImageURL,
-                            alt:srcImg.tags,
-                        }
-                    })}
-                    return {
+                images=data.hits.map(srcImg=>({
                     smallImage:srcImg.webformatURL,
                     bigImage:srcImg.largeImageURL,
                     alt:srcImg.tags,
                     id:srcImg.id.toString(),
-                    onClick:click,
-                    }
-                })
+                    }))
             }
 
             this.setState(p=>({images:[...p.images,...images],maxPages,page,isLoading:false,isLoadButton:page<maxPages}))
@@ -116,7 +115,7 @@ export default class App extends Component {
             <div className="App">
                 {this.state.modal && <Modal image={this.state.modal} onClose={this.closeModal} />}
                 <Searchbar onSubmit={this.handelSubmit}/>
-                <ImageGallery images={this.state.images} />
+                <ImageGallery images={this.state.images} onClick={this.handelCicks}/>
                 {this.state.isLoadButton && <Button onMore={this.moreImages}/>}
                 {this.state.isLoading && <Loader/>}
             </div>
