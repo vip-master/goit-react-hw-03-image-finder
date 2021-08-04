@@ -100,7 +100,10 @@ export default class App extends Component {
 
     componentDidUpdate(){
         if(this.state.isLoading) this.downImages()
-        if(this.afterScroll) this.scrollUp()
+        if(this.afterScroll) {
+            this.scrollUp()
+            this.afterScroll=false
+        }
     }
 
     moreImages=async()=>{
