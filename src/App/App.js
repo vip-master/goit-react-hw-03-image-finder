@@ -4,7 +4,7 @@ import Searchbar from '../Components/searchbar/Searchbar';
 import Button from '../Components/button/Button';
 import Loader from '../Components/loader/Loader';
 import Modal from '../Components/modal/Modal'
-import axios from 'axios'
+import getData from '../utils/api'
 
 export default class App extends Component {
 
@@ -37,12 +37,10 @@ export default class App extends Component {
         this.setState({...this._INITIAL_STATE_, query:e.target[1].value.trim().replaceAll(" ","+"),isLoading:true})        
     }
 
-    handelCicks=({target:{id}})=>{
-        const srcImg=this.state.images.find(i=>i.id===id)
-        this.setState({modal:{
-            bigImage:srcImg.bigImage,
-            alt:srcImg.alt,
-        }})
+    handelCicks=(e)=>{
+        // {target:{dataset:{bigImage,alt}}}
+        console.log(e)
+        this.setState({modal:{bigImage:e.target.dataset.bigimage,alt:e.target.dataset.alt}})
     }
 
     downImages=async()=>{
@@ -51,8 +49,6 @@ export default class App extends Component {
             return
         }
         
-        const TOKEN="21059964-5bf790d712106238e57c2f022"
-        const SITE="https://pixabay.com/api/"
         const PER_PAGE=12
 
         let page=this.state.page
@@ -64,7 +60,7 @@ export default class App extends Component {
         }
 
         try{
-            const {data}=await axios(`${SITE}?key=${TOKEN}&q=${this.state.query}&per_page=${PER_PAGE}&page=${page}`)
+            const {data}=await getData(this.state.query,page,PER_PAGE)
             
             let maxPages=0
             let images=[]
@@ -79,22 +75,10 @@ export default class App extends Component {
                     }))
             }
 
-            this.setState(p=>({images:[...p.images,...images],maxPages,page,isLoading:false,isLoadButton:page<maxPages}))
+            this.setState(prev=>({images:[...prev.images,...images],maxPages,page,isLoading:false,isLoadButton:page<maxPages}))
         }catch(error){
             this.setState({isLoading:false,isLoadButton:false})
         }
-    }
-
-    _handleEscKey=(e)=>{
-        if(this.state.modal && e.keyCode === 27) this.closeModal()
-    }
-
-    componentDidMount(){
-        document.addEventListener("keydown", this._handleEscKey, false);
-    }
-
-    componentWillUnmount(){
-        document.removeEventListener("keydown", this._handleEscKey, false);
     }
 
     componentDidUpdate(){
