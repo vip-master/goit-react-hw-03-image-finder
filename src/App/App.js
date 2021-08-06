@@ -37,10 +37,8 @@ export default class App extends Component {
         this.setState({...this._INITIAL_STATE_, query:e.target[1].value.trim().replaceAll(" ","+"),isLoading:true})        
     }
 
-    handelCicks=(e)=>{
-        // {target:{dataset:{bigImage,alt}}}
-        console.log(e)
-        this.setState({modal:{bigImage:e.target.dataset.bigimage,alt:e.target.dataset.alt}})
+    handelCicks=({target:{dataset:{bigimage:bigImage,alt}}})=>{
+        this.setState({modal:{bigImage,alt}})
     }
 
     downImages=async()=>{
