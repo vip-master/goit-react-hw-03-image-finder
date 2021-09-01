@@ -6,20 +6,21 @@ import Loader from '../Components/loader/Loader';
 import Modal from '../Components/modal/Modal'
 import getData from '../utils/api'
 
+const _INITIAL_STATE_={
+    images:[],
+    page:0,
+    query:"",
+    maxPages:0,
+    isLoadButton:false,
+    isLoading:false,
+    modal:null,
+}
+
 export default class App extends Component {
 
-    _INITIAL_STATE_={
-        images:[],
-        page:0,
-        query:"",
-        maxPages:0,
-        isLoadButton:false,
-        isLoading:false,
-        modal:null,
-    }
     afterScroll = false
     
-    state = {...this._INITIAL_STATE_}
+    state = {..._INITIAL_STATE_}
 
     closeModal=()=>{
         this.setState({modal:null})
@@ -34,7 +35,7 @@ export default class App extends Component {
 
     handelSubmit=(e)=>{
         e.preventDefault()
-        this.setState({...this._INITIAL_STATE_, query:e.target[1].value.trim().replaceAll(" ","+"),isLoading:true})        
+        this.setState({..._INITIAL_STATE_, query:e.target[1].value.trim().replaceAll(" ","+"),isLoading:true})        
     }
 
     handelCicks=({target:{dataset:{bigimage:bigImage,alt}}})=>{
