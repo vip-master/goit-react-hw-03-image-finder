@@ -99,8 +99,8 @@ export default class App extends Component {
                 {this.state.modal && <Modal image={this.state.modal} onClose={this.closeModal} />}
                 <Searchbar onSubmit={this.handelSubmit}/>
                 <ImageGallery images={this.state.images} onClick={this.handelCicks}/>
-                {this.state.isLoadButton && <Button onMore={this.moreImages}/>}
                 {this.state.isLoading && <Loader/>}
+                {this.state.isLoadButton && <Button onMore={this.moreImages}/>}
             </div>
         )
     }
